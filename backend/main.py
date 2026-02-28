@@ -4,7 +4,7 @@ from typing import List
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from decision_engine import compute_book_scores
+from decision_engine import compute_ranked_books
 from models import EvaluationRequest, EvaluationResponse
 
 
@@ -58,7 +58,11 @@ async def health_check():
 
 @app.post("/evaluate", response_model=EvaluationResponse)
 async def evaluate_books(payload: EvaluationRequest):
-    ranked = compute_book_scores(payload.books, payload.weights.model_dump())
+    books_payload = [
+        {"name": b.name, "ratings": b.ratings}
+        for b in payload.books
+    ]
+    ranked = compute_ranked_books(books_payload, payload.weights)
     return {"ranked_books": ranked}
 
 

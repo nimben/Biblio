@@ -1,43 +1,150 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { evaluateBooks } from "./api";
 
+function nextId(prefix) {
+  return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+}
+
+const DEFAULT_WEIGHT = 1;
+const DEFAULT_RATING = 5;
+const MIN_WEIGHT = 0.01;
+
 function App() {
-  const [booksInput, setBooksInput] = useState("");
-  const [readability, setReadability] = useState(5);
-  const [depth, setDepth] = useState(5);
-  const [popularity, setPopularity] = useState(5);
+  const [books, setBooks] = useState([
+    { id: nextId("book"), name: "" },
+    { id: nextId("book"), name: "" },
+  ]);
+  const [criteria, setCriteria] = useState([
+    { id: nextId("crit"), name: "Readability", weight: 3 },
+    { id: nextId("crit"), name: "Depth", weight: 5 },
+    { id: nextId("crit"), name: "Practicality", weight: 2 },
+  ]);
+  const [ratings, setRatings] = useState(() => {
+    const initial = {};
+    books.forEach((b) => {
+      initial[b.id] = {};
+      criteria.forEach((c) => {
+        initial[b.id][c.id] = DEFAULT_RATING;
+      });
+    });
+    return initial;
+  });
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [results, setResults] = useState([]);
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const addBook = useCallback(() => {
+    const id = nextId("book");
+    setBooks((prev) => [...prev, { id, name: "" }]);
+    setRatings((prev) => {
+      const next = { ...prev };
+      next[id] = {};
+      criteria.forEach((c) => {
+        next[id][c.id] = DEFAULT_RATING;
+      });
+      return next;
+    });
+  }, [criteria]);
+
+  const removeBook = useCallback((bookId) => {
+    if (books.length <= 1) return;
+    setBooks((prev) => prev.filter((b) => b.id !== bookId));
+    setRatings((prev) => {
+      const next = { ...prev };
+      delete next[bookId];
+      return next;
+    });
+  }, [books.length]);
+
+  const setBookName = useCallback((bookId, name) => {
+    setBooks((prev) =>
+      prev.map((b) => (b.id === bookId ? { ...b, name } : b))
+    );
+  }, []);
+
+  const addCriterion = useCallback(() => {
+    const id = nextId("crit");
+    setCriteria((prev) => [...prev, { id, name: "New criterion", weight: DEFAULT_WEIGHT }]);
+    setRatings((prev) => {
+      const next = { ...prev };
+      Object.keys(next).forEach((bookId) => {
+        next[bookId] = { ...next[bookId], [id]: DEFAULT_RATING };
+      });
+      return next;
+    });
+  }, []);
+
+  const removeCriterion = useCallback((critId) => {
+    if (criteria.length <= 1) return;
+    setCriteria((prev) => prev.filter((c) => c.id !== critId));
+    setRatings((prev) => {
+      const next = { ...prev };
+      Object.keys(next).forEach((bookId) => {
+        const copy = { ...next[bookId] };
+        delete copy[critId];
+        next[bookId] = copy;
+      });
+      return next;
+    });
+  }, [criteria.length]);
+
+  const setCriterionName = useCallback((critId, name) => {
+    setCriteria((prev) =>
+      prev.map((c) => (c.id === critId ? { ...c, name } : c))
+    );
+  }, []);
+
+  const setCriterionWeight = useCallback((critId, weight) => {
+    const num = Math.max(MIN_WEIGHT, Number(weight) || 0);
+    setCriteria((prev) =>
+      prev.map((c) => (c.id === critId ? { ...c, weight: num } : c))
+    );
+  }, []);
+
+  const setRating = useCallback((bookId, critId, value) => {
+    const num = Math.min(10, Math.max(0, Number(value) || 0));
+    setRatings((prev) => ({
+      ...prev,
+      [bookId]: {
+        ...prev[bookId],
+        [critId]: num,
+      },
+    }));
+  }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     setError("");
 
-    const books = booksInput
-      .split(",")
-      .map((b) => b.trim())
-      .filter((b) => b.length > 0);
-
-    if (books.length === 0) {
-      setError("Please enter at least one book name.");
+    const bookList = books.filter((b) => b.name.trim());
+    if (bookList.length === 0) {
+      setError("Add at least one book and enter its name.");
+      return;
+    }
+    const criteriaList = criteria.filter((c) => c.name.trim());
+    if (criteriaList.length === 0) {
+      setError("Add at least one criterion and enter its name.");
       return;
     }
 
-    const weights = {
-      readability: Number(readability),
-      depth: Number(depth),
-      popularity: Number(popularity),
-    };
+    const payloadBooks = bookList.map((b) => ({
+      name: b.name.trim(),
+      ratings: Object.fromEntries(
+        criteriaList.map((c) => [c.name.trim(), ratings[b.id]?.[c.id] ?? DEFAULT_RATING])
+      ),
+    }));
+    const payloadWeights = Object.fromEntries(
+      criteriaList.map((c) => [c.name.trim(), c.weight])
+    );
 
     setLoading(true);
     setResults([]);
-
     try {
-      const data = await evaluateBooks(books, weights);
+      const data = await evaluateBooks(payloadBooks, payloadWeights);
       setResults(data.ranked_books || []);
     } catch (err) {
-      setError(err.message || "Something went wrong while evaluating.");
+      setError(err.message || "Failed to evaluate.");
     } finally {
       setLoading(false);
     }
@@ -49,88 +156,143 @@ function App() {
         <header className="card-header">
           <h1>Book Decision Companion</h1>
           <p className="subtitle">
-            Compare multiple books using weighted decision criteria.
+            Define options, criteria, weights, and rate each book. Results are ranked by weighted score.
           </p>
         </header>
 
         <form className="form" onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="books">
-              Book options
-              <span className="label-hint"> (comma separated)</span>
-            </label>
-            <input
-              id="books"
-              type="text"
-              placeholder="Example: Deep Work, Atomic Habits, Thinking Fast and Slow"
-              value={booksInput}
-              onChange={(e) => setBooksInput(e.target.value)}
-            />
-          </div>
-
-          <div className="weights-grid">
-            <div className="form-group">
-              <label htmlFor="readability">
-                Readability weight
-                <span className="label-hint"> (0–10)</span>
-              </label>
-              <input
-                id="readability"
-                type="range"
-                min="0"
-                max="10"
-                step="1"
-                value={readability}
-                onChange={(e) => setReadability(e.target.value)}
-              />
-              <div className="range-value">{readability}</div>
+          <section className="section">
+            <div className="section-head">
+              <h2>Books</h2>
+              <button type="button" className="btn-add" onClick={addBook}>
+                + Add book
+              </button>
             </div>
+            <ul className="book-list">
+              {books.map((b) => (
+                <li key={b.id} className="book-row">
+                  <input
+                    type="text"
+                    value={b.name}
+                    onChange={(e) => setBookName(b.id, e.target.value)}
+                    placeholder="Book title"
+                    className="input-book"
+                  />
+                  <button
+                    type="button"
+                    className="btn-remove"
+                    onClick={() => removeBook(b.id)}
+                    disabled={books.length <= 1}
+                    title="Remove book"
+                  >
+                    ×
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </section>
 
-            <div className="form-group">
-              <label htmlFor="depth">
-                Depth weight
-                <span className="label-hint"> (0–10)</span>
-              </label>
-              <input
-                id="depth"
-                type="range"
-                min="0"
-                max="10"
-                step="1"
-                value={depth}
-                onChange={(e) => setDepth(e.target.value)}
-              />
-              <div className="range-value">{depth}</div>
+          <section className="section">
+            <div className="section-head">
+              <h2>Criteria & weights</h2>
+              <button type="button" className="btn-add" onClick={addCriterion}>
+                + Add criterion
+              </button>
             </div>
+            <ul className="criteria-list">
+              {criteria.map((c) => (
+                <li key={c.id} className="criterion-row">
+                  <input
+                    type="text"
+                    value={c.name}
+                    onChange={(e) => setCriterionName(c.id, e.target.value)}
+                    placeholder="Criterion name"
+                    className="input-criterion"
+                  />
+                  <label className="weight-label">
+                    Weight
+                    <input
+                      type="number"
+                      min={MIN_WEIGHT}
+                      step="0.5"
+                      value={c.weight}
+                      onChange={(e) => setCriterionWeight(c.id, e.target.value)}
+                      className="input-weight"
+                    />
+                  </label>
+                  <button
+                    type="button"
+                    className="btn-remove"
+                    onClick={() => removeCriterion(c.id)}
+                    disabled={criteria.length <= 1}
+                    title="Remove criterion"
+                  >
+                    ×
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </section>
 
-            <div className="form-group">
-              <label htmlFor="popularity">
-                Popularity weight
-                <span className="label-hint"> (0–10)</span>
-              </label>
-              <input
-                id="popularity"
-                type="range"
-                min="0"
-                max="10"
-                step="1"
-                value={popularity}
-                onChange={(e) => setPopularity(e.target.value)}
-              />
-              <div className="range-value">{popularity}</div>
+          <section className="section">
+            <h2>Rate each book (0–10)</h2>
+            <div className="matrix-wrap">
+              <table className="matrix">
+                <thead>
+                  <tr>
+                    <th className="cell-book">Book</th>
+                    {criteria.map((c) => (
+                      <th key={c.id} className="cell-criterion">
+                        {c.name || "(unnamed)"}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {books.map((b) => (
+                    <tr key={b.id}>
+                      <td className="cell-book">
+                        <input
+                          type="text"
+                          value={b.name}
+                          onChange={(e) => setBookName(b.id, e.target.value)}
+                          placeholder="Book title"
+                          className="input-inline"
+                        />
+                      </td>
+                      {criteria.map((c) => (
+                        <td key={c.id} className="cell-rating">
+                          <input
+                            type="number"
+                            min="0"
+                            max="10"
+                            step="1"
+                            value={ratings[b.id]?.[c.id] ?? ""}
+                            onChange={(e) =>
+                              setRating(b.id, c.id, e.target.value)
+                            }
+                            className="input-rating"
+                          />
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
-          </div>
+          </section>
 
-          <button className="submit-button" type="submit" disabled={loading}>
-            {loading ? "Evaluating..." : "Evaluate books"}
+          <button
+            type="submit"
+            className="submit-button"
+            disabled={loading || books.filter((b) => b.name.trim()).length === 0}
+          >
+            {loading ? "Evaluating..." : "Evaluate"}
           </button>
         </form>
 
         {error && <div className="alert alert-error">{error}</div>}
-
-        {loading && (
-          <div className="status-text">Contacting decision engine...</div>
-        )}
+        {loading && <div className="status-text">Computing weighted scores…</div>}
 
         {results.length > 0 && !loading && (
           <section className="results">
@@ -148,7 +310,7 @@ function App() {
                   <tr key={`${book.name}-${index}`}>
                     <td>{index + 1}</td>
                     <td>{book.name}</td>
-                    <td>{book.score.toFixed(2)}</td>
+                    <td>{typeof book.score === "number" ? book.score.toFixed(2) : book.score}</td>
                   </tr>
                 ))}
               </tbody>
@@ -161,4 +323,3 @@ function App() {
 }
 
 export default App;
-

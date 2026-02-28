@@ -21,7 +21,7 @@ body {
 
 .card {
   width: 100%;
-  max-width: 840px;
+  max-width: 960px;
   background-color: #ffffff;
   border-radius: 16px;
   box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
@@ -49,6 +49,166 @@ body {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+}
+
+.section {
+  margin-top: 0.5rem;
+}
+
+.section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.section h2 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.btn-add {
+  padding: 0.4rem 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid #4f46e5;
+  background: #fff;
+  color: #4f46e5;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-add:hover {
+  background: #eef2ff;
+}
+
+.btn-remove {
+  flex-shrink: 0;
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
+  border-radius: 0.4rem;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  color: #6b7280;
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.btn-remove:hover:not(:disabled) {
+  background: #fee2e2;
+  color: #b91c1c;
+  border-color: #fecaca;
+}
+
+.btn-remove:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.book-list,
+.criteria-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.book-row,
+.criterion-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.input-book {
+  flex: 1;
+  min-width: 0;
+}
+
+.input-criterion {
+  flex: 1;
+  min-width: 0;
+  max-width: 12rem;
+}
+
+.weight-label {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.input-weight {
+  width: 4rem;
+  padding: 0.35rem 0.4rem;
+  border-radius: 0.4rem;
+  border: 1px solid #d1d5db;
+  font-size: 0.9rem;
+}
+
+.matrix-wrap {
+  overflow-x: auto;
+  margin-top: 0.5rem;
+}
+
+.matrix {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.matrix th,
+.matrix td {
+  padding: 0.5rem 0.4rem;
+  border: 1px solid #e5e7eb;
+  vertical-align: middle;
+}
+
+.matrix thead th {
+  background: #f3f4f6;
+  font-weight: 600;
+  color: #374151;
+  text-align: left;
+}
+
+.cell-book {
+  min-width: 10rem;
+}
+
+.cell-criterion {
+  min-width: 5rem;
+  text-align: center;
+}
+
+.cell-rating {
+  text-align: center;
+}
+
+.input-inline {
+  width: 100%;
+  min-width: 8rem;
+  padding: 0.4rem 0.5rem;
+  border-radius: 0.4rem;
+  border: 1px solid #e5e7eb;
+  font-size: 0.9rem;
+}
+
+.input-rating {
+  width: 3.5rem;
+  padding: 0.35rem 0.25rem;
+  border-radius: 0.4rem;
+  border: 1px solid #d1d5db;
+  font-size: 0.9rem;
+  text-align: center;
 }
 
 .form-group {

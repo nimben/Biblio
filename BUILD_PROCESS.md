@@ -223,11 +223,9 @@ flowchart TD
     B --> C[Assign Weight to Each Criterion]
     C --> D[Rate Each Option per Criterion]
     D --> E[Calculate Weighted Score]
-    E --> F[Normalize Score (0–10)]
+    E --> F[Normalize Score 0 to 10]
     F --> G[Rank Options]
-    G --> H[Return Best Option + Score Breakdown]
-
-    E --> I[Formula: Σ (rating × weight)]
+    G --> H[Return Best Option with Explanation]
 ---
 
 ## 13. Edge Cases Considered

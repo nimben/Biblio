@@ -226,7 +226,17 @@ flowchart TD
     E --> F[Normalize Score 0 to 10]
     F --> G[Rank Options]
     G --> H[Return Best Option with Explanation]
+'''
 
+### Weighted Score Formula
+
+Final Score = Sum (rating × weight)
+
+Where:
+- rating = user-given score
+- weight = assigned importance
+
+---
 ## 13. Edge Cases Considered
 
 - No books provided

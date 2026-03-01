@@ -165,9 +165,9 @@ function App() {
       <main className="decision-engine-section">
         <div className="card">
           <header className="card-header">
-            <h2 className="card-title">Decision tool</h2>
+            <h2 className="card-title">Find Your Next Great Read</h2>
             <p className="subtitle">
-              Define options, criteria, weights, and rate each book. Results are ranked by weighted score.
+            Define what matters to you and let BIBILIO help you identify the book that stands out.
             </p>
           </header>
 

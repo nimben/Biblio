@@ -226,7 +226,7 @@ flowchart TD
     E --> F[Normalize Score 0 to 10]
     F --> G[Rank Options]
     G --> H[Return Best Option with Explanation]
-'''
+```
 
 ### Weighted Score Formula
 

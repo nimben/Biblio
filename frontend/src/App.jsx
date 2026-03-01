@@ -152,15 +152,26 @@ function App() {
 
   return (
     <div className="app-root">
-      <div className="card">
-        <header className="card-header">
-          <h1>Book Decision Companion</h1>
-          <p className="subtitle">
-            Define options, criteria, weights, and rate each book. Results are ranked by weighted score.
+      <header className="hero">
+        <h1 className="hero-brand">BIBILIO</h1>
+        <blockquote className="hero-quote">
+          <p className="hero-quote-text">
+            &ldquo;If you don&rsquo;t like to read, you haven&rsquo;t found the right book.&rdquo;
           </p>
-        </header>
+          <cite className="hero-quote-author">&mdash; J.K. Rowling</cite>
+        </blockquote>
+      </header>
 
-        <form className="form" onSubmit={handleSubmit}>
+      <main className="decision-engine-section">
+        <div className="card">
+          <header className="card-header">
+            <h2 className="card-title">Decision tool</h2>
+            <p className="subtitle">
+              Define options, criteria, weights, and rate each book. Results are ranked by weighted score.
+            </p>
+          </header>
+
+          <form className="form" onSubmit={handleSubmit}>
           <section className="section">
             <div className="section-head">
               <h2>Books</h2>
@@ -214,7 +225,7 @@ function App() {
                     <input
                       type="number"
                       min={MIN_WEIGHT}
-                      step="0.5"
+                      step="any"
                       value={c.weight}
                       onChange={(e) => setCriterionWeight(c.id, e.target.value)}
                       className="input-weight"
@@ -317,7 +328,8 @@ function App() {
             </table>
           </section>
         )}
-      </div>
+        </div>
+      </main>
     </div>
   );
 }

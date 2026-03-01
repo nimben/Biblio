@@ -60,6 +60,7 @@ class EvaluationRequest(BaseModel):
 class RankedBook(BaseModel):
     name: str
     score: float
+    breakdown: Dict[str, float]
 
 
 class EvaluationResponse(BaseModel):

@@ -427,6 +427,47 @@ input[type="range"] {
   font-variant-numeric: tabular-nums;
 }
 
+.why-section {
+  margin-top: 1.5rem;
+}
+
+.why-title {
+  margin: 0 0 0.35rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.why-text {
+  margin: 0 0 0.75rem;
+  font-size: 0.9rem;
+  color: #4b5563;
+}
+
+.breakdown-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e8e8e8;
+}
+
+.breakdown-table th,
+.breakdown-table td {
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid #e8e8e8;
+  text-align: left;
+}
+
+.breakdown-table thead {
+  background: #f8f8f8;
+}
+
+.breakdown-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
 @media (max-width: 768px) {
   .hero {
     padding: 3rem 1rem 3.5rem;

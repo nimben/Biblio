@@ -213,7 +213,24 @@ It is a decision support tool, not a predictive system.
 
 ---
 
-## 12. Edge Cases Considered
+## 12. Decision Logic Diagram
+
+The decision engine follows a structured weighted scoring model.
+
+```mermaid
+flowchart TD
+    A[User Defines Options] --> B[User Defines Criteria]
+    B --> C[Assign Weight to Each Criterion]
+    C --> D[Rate Each Option per Criterion]
+    D --> E[Calculate Weighted Score]
+    E --> F[Normalize Score (0–10)]
+    F --> G[Rank Options]
+    G --> H[Return Best Option + Score Breakdown]
+
+    E --> I[Formula: Σ (rating × weight)]
+---
+
+## 13. Edge Cases Considered
 
 - No books provided
 - No criteria provided
@@ -226,7 +243,7 @@ All are validated before score calculation.
 
 ---
 
-## 13. What I Would Improve With More Time
+## 14. What I Would Improve With More Time
 
 - Add decision history persistence
 - Add visualization (bar charts)
@@ -237,7 +254,7 @@ All are validated before score calculation.
 
 ---
 
-## 14. Reflection
+## 15. Reflection
 
 The most important shift was moving from:
 Artificial heuristic scoring → Fully user-driven weighted evaluation.

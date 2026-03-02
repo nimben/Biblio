@@ -192,7 +192,7 @@ function App() {
                     type="text"
                     value={b.name}
                     onChange={(e) => setBookName(b.id, e.target.value)}
-                    placeholder="Book title"
+                    placeholder="Enter Atomic Habits, Deep Work, etc."
                     className="input-book"
                   />
                   <button

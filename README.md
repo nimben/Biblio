@@ -5,8 +5,8 @@ _“Which book should I read next, given what matters to me right now?”_
 
 The system is intentionally simple and transparent: it’s a **weighted decision matrix** that I can drive myself. I define the options, I define the criteria, I pick the weights, I rate each option, and the tool simply does the maths and shows me the ranking and the reasoning.
 
-The code lives in a single repo with a small FastAPI backend and a React/Vite frontend.
-<br>
+The code lives in a single repo with a small FastAPI backend and a React/Vite frontend.<br>
+
 ## My understanding of the problem
 
 For this assignment I assumed the core job is:
@@ -15,9 +15,9 @@ For this assignment I assumed the core job is:
 - Let the user define their own criteria and relative importance (weights).
 - Collect ratings per option per criterion.
 - Compute a score using a clear, explainable formula.
-- Return a ranked list **and** explain why the top choice came out on top.
+- Return a ranked list **and** explain why the top choice came out on top.<br>
 
-<br>
+
 ## What the system does
 
 - Lets me add/remove book options.
@@ -28,14 +28,14 @@ For this assignment I assumed the core job is:
 - The frontend shows:
   - A ranked table of books.
   - A short **“Why this ranking?”** explanation for the top book, based on the breakdown.
-<br>
+
 ## High‑level design
 
 ### Project structure
 
 - `backend/`: FastAPI app, Pydantic models, and decision engine.
 - `frontend/`: React + Vite SPA
-<br>
+
 ### Architecture 
 
 ```mermaid
@@ -47,7 +47,7 @@ flowchart LR
   BE -->|ranked_books + breakdown| FE
   FE -->|ranked table + why text| U
 ```
-<br>
+
 ### Data model and API
 
 `POST /evaluate` request:
@@ -133,7 +133,7 @@ flowchart TD
   C --> D[Normalize to 0–10]
   D --> E[Score and per‑criterion breakdown]
 ```
-<br>
+
 ## Backend (FastAPI)
 
 ### Tech

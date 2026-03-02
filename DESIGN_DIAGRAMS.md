@@ -17,7 +17,7 @@ The backend integrates the decision engine internally to compute weighted rankin
 ## Level 1 Data Flow Diagram (DFD)
 
 <p align="center">
-  <img src="assets/dataflow.png" width="600"/>
+  <img src="assets/dataflow.png" width="900"/>
 </p>
 
 <p align="center">

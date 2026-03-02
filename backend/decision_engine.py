@@ -1,6 +1,4 @@
 from typing import Dict, List
-
-
 def compute_ranked_books(
     books: List[Dict],
     weights: Dict[str, float],

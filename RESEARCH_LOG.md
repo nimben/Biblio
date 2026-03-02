@@ -1,6 +1,6 @@
 # Research Log: BIBILIO
 
-**Researcher:** Nimmy Benny
+**Researcher:** Nimmy Benny<br>
 **Goal:** Build a simple web-based decision support tool that ranks books using a weighted decision matrix and clearly explains why one option is ranked above another.
 
 ---
@@ -12,7 +12,7 @@
 
 ---
 
-## 🗓 Log Entries 
+## Log Entries 
 
 ### Initial Architecture Planning
 
@@ -20,8 +20,8 @@
 - **Notes:**  
   Decided that no database or authentication was needed because the assignment didn’t require persistence.
 - **AI Prompts Used:**  
-- “Help me scaffold a FastAPI backend and React/Vite frontend for a decision-making tool.”
-- “What’s a clean folder structure for a small production-ready FastAPI + React project?”
+  - “Help me scaffold a FastAPI backend and React/Vite frontend for a decision-making tool.”
+  - “What’s a clean folder structure for a small production-ready FastAPI + React project?”
   
 
 ---
@@ -33,12 +33,12 @@
 - **Notes:**  
   The tricky part was handling dynamic criteria. Each book needs ratings per criterion, and each criterion has a weight. I used a weighted sum approach and normalized the final score to 0–10 to make results easier to interpret.
 - **AI Prompts Used:**  
-- “How can I design Pydantic models to accept dynamic criteria and weights?”
-- “What’s a clean way to validate a request body containing books, criteria, weights, and ratings?”
-- “How should I structure a weighted decision matrix in Python?”
-- “How do I implement a weighted sum scoring algorithm?”
-- “How can I normalize scores to a 0–10 scale?”
-- “How can I return a per-criterion breakdown for explainability?”
+  - “How can I design Pydantic models to accept dynamic criteria and weights?”
+  - “What’s a clean way to validate a request body containing books, criteria, weights, and ratings?”
+  - “How should I structure a weighted decision matrix in Python?”
+  - “How do I implement a weighted sum scoring algorithm?”
+  - “How can I normalize scores to a 0–10 scale?”
+  - “How can I return a per-criterion breakdown for explainability?”
 
 ---
 
@@ -48,9 +48,9 @@
 - **Notes:**  
   Rendering a matrix (books × criteria) was more complex than expected. Managing state cleanly in React took a few iterations.
 - **AI Prompts Used:**  
-- “How can I dynamically add/remove books and criteria in React?”
-- “How do I render a matrix-style input (books × criteria)?”
-- “How can I improve UI styling without changing business logic?”
+  - “How can I dynamically add/remove books and criteria in React?”
+  - “How do I render a matrix-style input (books × criteria)?”
+  - “How can I improve UI styling without changing business logic?”
 
 ---
 
@@ -67,10 +67,10 @@
 - **Action:** Created architecture diagram and DFD.
 - **Notes:**  
   Focused on clarity rather than complexity. I intentionally avoided adding fake components like databases or auth systems that don’t exist.
-  - **AI Prompts Used:**  
-- “What diagrams should I include for a small web architecture?”
-- “Help me check what might be missing from this assignment.”
-- “How should I explain design decisions clearly in a README?”
+- **AI Prompts Used:**  
+  - “What diagrams should I include for a small web architecture?”
+  - “Help me check what might be missing from this assignment.”
+  - “How should I explain design decisions clearly in a README?”
 ---
 
 ## Source Library & Notes

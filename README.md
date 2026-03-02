@@ -29,7 +29,7 @@ For this assignment I assumed the core job is:
   - A ranked table of books.
   - A short **“Why this ranking?”** explanation for the top book, based on the breakdown.
 
-## High‑level design
+<br>## High‑level design
 
 ### Project structure
 

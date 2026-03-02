@@ -234,24 +234,76 @@ npm run build
 
 This creates a `dist/` folder that Netlify (or any static host) can serve.
 
-## Deployment notes
+## Deployment (Render + Netlify)
 
-### Backend on Render
+You don’t need to change any code. Push to GitHub, then deploy backend first, then frontend.
 
-1. Push this repo to GitHub.
-2. In Render, create a new **Web Service** pointing at the repo.
-3. Set the working directory to `backend` (or root with commands adjusted).
-4. Build command (if needed): `pip install -r requirements.txt`
-5. Start command: `uvicorn main:app --host 0.0.0.0 --port 8000`
-6. Set `ALLOWED_ORIGINS` to your Netlify URL.
+### 1. Deploy backend on Render
 
-### Frontend on Netlify
+1. Go to [render.com](https://render.com) and sign in (GitHub is fine).
+2. **New** → **Web Service**.
+3. Connect your GitHub account if needed, then select the repo that contains this project.
+4. Configure the service:
+   - **Name:** e.g. `biblio-api`
+   - **Region:** pick one close to you.
+   - **Root Directory:** `backend`  
+     (so Render runs everything from the `backend` folder).
+   - **Runtime:** Python 3.
+   - **Build Command:**  
+     `pip install -r requirements.txt`
+   - **Start Command:**  
+     `uvicorn main:app --host 0.0.0.0 --port $PORT`  
+     (Render sets `PORT`; you must use it.)
+5. **Environment** (in the same screen or **Environment** tab):
+   - Add a variable:
+     - Key: `ALLOWED_ORIGINS`
+     - Value: leave empty for now; you’ll set it after you have the Netlify URL.
+6. Click **Create Web Service**. Wait for the first deploy to finish.
+7. Copy your service URL, e.g. `https://biblio-api-xxxx.onrender.com`.  
+   You’ll need it for the frontend and for CORS.
 
-1. In Netlify, create a **New site from Git** using this repo.
-2. Base directory: `frontend`
-3. Build command: `npm run build`
-4. Publish directory: `dist`
-5. Set `VITE_API_URL` to your Render backend URL.
+### 2. Deploy frontend on Netlify
+
+1. Go to [netlify.com](https://netlify.com) and sign in (e.g. with GitHub).
+2. **Add new site** → **Import an existing project** → **GitHub** → choose your repo.
+3. Configure the build:
+   - **Base directory:** `frontend`  
+     (Netlify will run build and publish from this folder; `frontend/netlify.toml` sets the rest.)
+   - **Build command:** (optional) leave default or `npm run build`.
+   - **Publish directory:** (optional) leave default or `dist`.
+4. **Environment variables** (expand “Advanced settings” or go to **Site settings** → **Environment variables**):
+   - Key: `VITE_API_URL`  
+   - Value: your Render backend URL **with no trailing slash**, e.g.  
+     `https://biblio-api-xxxx.onrender.com`
+5. Click **Deploy site**. Wait until the deploy is done.
+6. Copy your Netlify URL, e.g. `https://your-site-name.netlify.app`.
+
+### 3. Allow Netlify in backend CORS
+
+1. Back in **Render** → your backend service → **Environment**.
+2. Set **ALLOWED_ORIGINS** to your Netlify URL, e.g.:  
+   `https://your-site-name.netlify.app`  
+   (If you use a custom domain later, add it too, comma-separated.)
+3. Save. Render will redeploy; wait for it to finish.
+
+### 4. Check that it works
+
+- Open your Netlify URL in the browser.
+- Add a couple of books, set criteria and weights, rate them, and click **Evaluate**.
+- You should see the ranked list and the “Why this ranking?” section. If you get a network or CORS error, double-check:
+  - **VITE_API_URL** on Netlify = exact Render URL (no trailing slash).
+  - **ALLOWED_ORIGINS** on Render = exact Netlify origin (e.g. `https://your-site-name.netlify.app`).
+
+### Summary
+
+| Where    | What to set |
+|----------|-------------|
+| **Render** | Root directory: `backend` · Start: `uvicorn main:app --host 0.0.0.0 --port $PORT` · Env: `ALLOWED_ORIGINS` = Netlify URL |
+| **Netlify** | Base directory: `frontend` · Env: `VITE_API_URL` = Render URL (no trailing slash) |
+
+No code changes are required for this to work.
+
+**Note:** On Render’s free tier the backend may spin down after a period of inactivity. The first request after that can take 30–60 seconds; after that it’s fast until the next spin-down.
 
 ## Design decisions and trade‑offs
 

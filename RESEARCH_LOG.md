@@ -1,91 +1,108 @@
 # Research Log: BIBILIO
 
-**Researcher:** [Your Name]  
-**Start Date:** 2025-02-XX  
+**Researcher:** Nimmy Benny
 **Goal:** Build a simple web-based decision support tool that ranks books using a weighted decision matrix and clearly explains why one option is ranked above another.
 
 ---
 
-## 🎯 Master Plan & Goals
+## Master Plan & Goals
 
 - **Targeted Output:** Functional FastAPI + React application with clear documentation and diagrams.
 - **Core Question:** How can I design a lightweight system that ranks books using user-defined criteria and also explains the reasoning transparently?
 
 ---
 
-## 🗓 Log Entries (Chronological)
+## 🗓 Log Entries 
 
-### 2025-02-XX – Initial Architecture Planning
+### Initial Architecture Planning
 
 - **Action:** Planned system structure (frontend + backend separation).
 - **Notes:**  
-  I wanted to keep things simple and avoid overengineering. Decided early that no database or authentication was needed because the assignment didn’t require persistence.
-- **Reflection:**  
-  Keeping it stateless made everything cleaner and easier to reason about.
+  Decided that no database or authentication was needed because the assignment didn’t require persistence.
+- **AI Prompts Used:**  
+- “Help me scaffold a FastAPI backend and React/Vite frontend for a decision-making tool.”
+- “What’s a clean folder structure for a small production-ready FastAPI + React project?”
+  
 
 ---
 
-### 2025-02-XX – Backend Model & Scoring Logic
+### Backend Model & Scoring Logic
 
 - **Action:** Designed FastAPI request/response models and scoring algorithm.
 - **Source:** FastAPI + Pydantic documentation (mainly for validation patterns).
 - **Notes:**  
   The tricky part was handling dynamic criteria. Each book needs ratings per criterion, and each criterion has a weight. I used a weighted sum approach and normalized the final score to 0–10 to make results easier to interpret.
-- **Reflection:**  
-  I briefly considered adding more “clever” scoring ideas, but decided to stick to a clean weighted matrix since that’s transparent and easy to justify.
+- **AI Prompts Used:**  
+- “How can I design Pydantic models to accept dynamic criteria and weights?”
+- “What’s a clean way to validate a request body containing books, criteria, weights, and ratings?”
+- “How should I structure a weighted decision matrix in Python?”
+- “How do I implement a weighted sum scoring algorithm?”
+- “How can I normalize scores to a 0–10 scale?”
+- “How can I return a per-criterion breakdown for explainability?”
 
 ---
 
-### 2025-02-XX – Frontend Dynamic Form
+### Frontend Dynamic Form
 
 - **Action:** Implemented ability to dynamically add/remove books and criteria.
 - **Notes:**  
   Rendering a matrix (books × criteria) was more complex than expected. Managing state cleanly in React took a few iterations.
-- **Reflection:**  
-  I kept the UI logic simple and avoided introducing unnecessary component layers.
+- **AI Prompts Used:**  
+- “How can I dynamically add/remove books and criteria in React?”
+- “How do I render a matrix-style input (books × criteria)?”
+- “How can I improve UI styling without changing business logic?”
 
 ---
 
-### 2025-02-XX – Explainability Improvement
+### Explainability Improvement
 
 - **Action:** Added per-criterion score breakdown in backend response.
 - **Notes:**  
   Instead of returning only a final score, the backend now includes contribution per criterion. This makes the ranking explainable.
-- **Reflection:**  
-  This was important. A ranked list without explanation would feel like a black box.
 
 ---
 
-### 2025-02-XX – Documentation & Diagrams
+###  Documentation & Diagrams
 
 - **Action:** Created architecture diagram and DFD.
 - **Notes:**  
   Focused on clarity rather than complexity. I intentionally avoided adding fake components like databases or auth systems that don’t exist.
-- **Reflection:**  
-  Clean diagrams are better than impressive-looking but inaccurate ones.
-
+  - **AI Prompts Used:**  
+- “What diagrams should I include for a small web architecture?”
+- “Help me check what might be missing from this assignment.”
+- “How should I explain design decisions clearly in a README?”
 ---
 
-## 📚 Source Library & Notes
+## Source Library & Notes
 
 - FastAPI documentation (routing, CORS, request validation)
 - Pydantic v2 documentation (model structure and validation)
 - Vite documentation (environment variables)
 - React documentation (state management basics)
 
-These were mostly references to confirm syntax and patterns rather than full tutorials.
+---
+
+## What I Accepted, Rejected, or Modified from AI Outputs
+
+### Accepted As-Is
+- Basic FastAPI app structure (`main.py` layout).
+- CORS middleware configuration.
+- Separation of scoring logic into a dedicated `decision_engine.py` file.
+
+### Accepted but Modified
+- Initial Pydantic model suggestions were simplified to better fit dynamic criteria.
+- UI layout suggestions were trimmed to avoid unnecessary components.
+- Some documentation wording was rewritten to sound more direct and less “marketing-style.”
+
+### Rejected
+- Suggestions involving adding authentication or databases (not required for this assignment).
+- Overly complex architectural additions (microservices, async queues, etc.).
+- Any heuristic-based scoring logic (e.g., title length, randomness, etc.).
+- Explanations that felt too abstract or overly polished.
 
 ---
 
-## 💡 Key Ideas & Findings
-
-- A simple weighted sum is often better than an “intelligent” but opaque scoring system.
-- Stateless architecture simplifies both deployment and reasoning.
-- Explainability matters as much as correctness in decision-support systems.
-
----
-
-## 🚀 Next Steps / Improvements (If Extended)
+## Next Steps / Improvements (If Extended)
 
 - Add persistence (save evaluations)
 - Add user accounts
@@ -101,5 +118,3 @@ AI was used mainly for:
 - Brainstorming structure and making sure I didn’t miss required assignment sections.
 - Reviewing documentation wording and helping me tighten explanations.
 
-I did not use AI to auto-generate the full application or scoring logic blindly.  
-The final structure and algorithm choices were deliberate and reflect how I personally wanted the system to behave.

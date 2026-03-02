@@ -329,9 +329,3 @@ This creates a `dist/` folder that Netlify (or any static host) can serve.
 - Add a small “scenario” feature: save one decision setup (books + criteria + weights) locally in the browser.
 - Add a couple of automated tests around the decision engine and the validation rules.
 
-## Git and monorepo
-
-- Git is initialized at the repo root.
-- `.gitignore` skips virtualenvs, `node_modules`, build artefacts, and `.env` files.
-- Backend and frontend live side by side to keep deployment simple (Render for the API, Netlify for the UI). 
-

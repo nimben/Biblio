@@ -15,16 +15,15 @@ specifically the structure of a Genetic Algorithm used for optimization problems
 
 This framework influenced how I thought about decision-making as an optimization process:
 
-- Options = population  
-- Evaluation logic = fitness function  
-- Highest scoring option = fittest solution  
+- Options = population
+- Evaluation logic = fitness function
+- Highest scoring option = fittest solution
 
 This optimization cycle shaped the structural thinking behind the decision engine, even though the final system does not directly implement evolutionary computation.
 
 However, implementing a full genetic algorithm would have been unnecessary and overly complex for this assignment.
 
-The conceptual influence remained, but the implementation evolved into a simpler and more transparent weighted decision model.
----
+## The conceptual influence remained, but the implementation evolved into a simpler and more transparent weighted decision model.
 
 ## 2. Defining the Overall Idea
 
@@ -71,6 +70,7 @@ That distinction reshaped the entire approach.
 Before fully committing to user-driven evaluation, I built a demo using synthetic scoring.
 
 The scoring was based on heuristics derived from book titles, such as:
+
 - Title length
 - Vowel count
 - Word patterns
@@ -78,6 +78,7 @@ The scoring was based on heuristics derived from book titles, such as:
 This simulated a “fitness function” similar to optimization algorithms.
 
 However, this approach had problems:
+
 - It was artificial
 - It was not transparent
 - It did not reflect real user preferences
@@ -96,6 +97,7 @@ The system evolved into a fully user-driven weighted decision matrix:
 Score = Σ (rating × weight)
 
 This approach is:
+
 - Deterministic
 - Transparent
 - Explainable
@@ -111,7 +113,9 @@ It calculates exactly what the user expresses.
 The evolution happened in stages:
 
 ### Phase 1: Static Criteria
+
 Hardcoded criteria such as:
+
 - Readability
 - Depth
 - Popularity
@@ -119,16 +123,20 @@ Hardcoded criteria such as:
 This proved too rigid.
 
 ### Phase 2: User-Defined Criteria
+
 Users could define their own evaluation criteria.
 
 ### Phase 3: Fully Dynamic System
+
 Users could:
+
 - Add criteria dynamically
 - Remove criteria
 - Assign weights
 - Rate each book dynamically
 
 This significantly improved:
+
 - Flexibility
 - Real-world usability
 - Architectural quality
@@ -163,6 +171,7 @@ Raw weighted scores depend on total weights.
 To improve user clarity, I normalized final scores to a 0–10 scale.
 
 This:
+
 - Prevents confusing large numbers
 - Improves UX
 - Makes comparisons easier
@@ -233,10 +242,12 @@ flowchart TD
 Final Score = Sum (rating × weight)
 
 Where:
+
 - rating = user-given score
 - weight = assigned importance
 
 ---
+
 ## 13. Edge Cases Considered
 
 - No books provided

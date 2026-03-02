@@ -40,6 +40,13 @@ function App() {
       ? Object.entries(topResult.breakdown)
       : [];
 
+  const highestWeightCriterion =
+    criteria.length > 0
+      ? criteria.reduce((best, current) =>
+          current.weight > best.weight ? current : best
+        )
+      : null;
+
   const addBook = useCallback(() => {
     const id = nextId("book");
     setBooks((prev) => [...prev, { id, name: "" }]);
@@ -333,36 +340,19 @@ function App() {
               </tbody>
             </table>
 
-            {topResult && topBreakdown.length > 0 && (
+            {topResult && (
               <div className="why-section">
                 <h3 className="why-title">Why this ranking?</h3>
                 <p className="why-text">
-                  {topResult.name} ends up on top with a score of{" "}
+                  {highestWeightCriterion && highestWeightCriterion.name
+                    ? `You placed the most importance on ${highestWeightCriterion.name}, which naturally guided how the results turned out.`
+                    : "You chose what mattered most, and the ranking follows that lead."}{" "}
+                  {topResult.name} rises to the top with a score of{" "}
                   {typeof topResult.score === "number"
                     ? topResult.score.toFixed(2)
                     : topResult.score}
-                  , based on these weighted contributions:
+                  , aligning closely with the things you said matter most.
                 </p>
-                <table className="breakdown-table">
-                  <thead>
-                    <tr>
-                      <th>Criterion</th>
-                      <th>Contribution (0–10)</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {topBreakdown.map(([criterion, value]) => (
-                      <tr key={criterion}>
-                        <td>{criterion}</td>
-                        <td>
-                          {typeof value === "number"
-                            ? value.toFixed(2)
-                            : value}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
               </div>
             )}
           </section>

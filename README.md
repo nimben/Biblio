@@ -17,7 +17,6 @@ For this assignment I assumed the core job is:
 - Compute a score using a clear, explainable formula.
 - Return a ranked list **and** explain why the top choice came out on top.
 
-The system must keep working even without any AI model. I treat AI as a helper while building, not as the runtime “brain” of the product.
 
 ## What the system does
 
@@ -35,9 +34,9 @@ The system must keep working even without any AI model. I treat AI as a helper w
 ### Project structure
 
 - `backend/`: FastAPI app, Pydantic models, and decision engine.
-- `frontend/`: React + Vite SPA (no component libraries, plain CSS).
+- `frontend/`: React + Vite SPA
 
-### Architecture (bird’s eye view)
+### Architecture 
 
 ```mermaid
 flowchart LR
@@ -124,7 +123,6 @@ In symbols, for one book:
 > normalized_score = (raw_score / max_possible) × 10  
 > where max_possible = Σ (10 × weight\[criterion])
 
-The backend also exposes the normalized contribution per criterion so the “why” text is just data, not guesswork.
 
 A simple view of the scoring flow:
 
@@ -163,7 +161,7 @@ flowchart TD
 - **`ALLOWED_ORIGINS`**: comma‑separated list of allowed CORS origins for production, e.g.  
   `ALLOWED_ORIGINS=https://your-netlify-site.netlify.app`
 
-> `.env` files are ignored by `.gitignore`. Don’t commit secrets.
+
 
 ### Run backend locally
 
@@ -236,7 +234,7 @@ This creates a `dist/` folder that Netlify (or any static host) can serve.
 
 ## Deployment (Render + Netlify)
 
-You don’t need to change any code. Push to GitHub, then deploy backend first, then frontend.
+
 
 ### 1. Deploy backend on Render
 
@@ -260,7 +258,7 @@ You don’t need to change any code. Push to GitHub, then deploy backend first, 
      - Value: leave empty for now; you’ll set it after you have the Netlify URL.
 6. Click **Create Web Service**. Wait for the first deploy to finish.
 7. Copy your service URL, e.g. `https://biblio-api-xxxx.onrender.com`.  
-   You’ll need it for the frontend and for CORS.
+   
 
 ### 2. Deploy frontend on Netlify
 
@@ -301,9 +299,6 @@ You don’t need to change any code. Push to GitHub, then deploy backend first, 
 | **Render** | Root directory: `backend` · Start: `uvicorn main:app --host 0.0.0.0 --port $PORT` · Env: `ALLOWED_ORIGINS` = Netlify URL |
 | **Netlify** | Base directory: `frontend` · Env: `VITE_API_URL` = Render URL (no trailing slash) |
 
-No code changes are required for this to work.
-
-**Note:** On Render’s free tier the backend may spin down after a period of inactivity. The first request after that can take 30–60 seconds; after that it’s fast until the next spin-down.
 
 ## Design decisions and trade‑offs
 
@@ -338,5 +333,5 @@ No code changes are required for this to work.
 
 - Git is initialized at the repo root.
 - `.gitignore` skips virtualenvs, `node_modules`, build artefacts, and `.env` files.
-- Backend and frontend live side by side to keep deployment simple (Render for the API, Netlify for the UI). A single repo also matches how I’d actually ship a small tool like this.
+- Backend and frontend live side by side to keep deployment simple (Render for the API, Netlify for the UI). 
 
